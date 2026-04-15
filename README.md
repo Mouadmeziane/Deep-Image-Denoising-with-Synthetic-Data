@@ -1,6 +1,7 @@
 # Image-Denoising-with-Deep-CNNs
 
-Use deep Convolutional Neural Networks (CNNs) with PyTorch, including investigating DnCNN and U-net architectures. More details in [`tutorial.ipynb`](src/tutorial.ipynb).
+This project studies deep convolutional neural networks for image denoising under controlled synthetic degradation settings.
+Details in [`tutorial.ipynb`](src/tutorial.ipynb).
 
  A Study of Model Behavior and Generalization
 
@@ -177,6 +178,22 @@ A comparative analysis was conducted between models of varying depth and complex
 This highlights the trade-off between **frugality** and **accuracy**.
 
 ---
+
+## ✍️ Contribution
+
+This project builds upon existing academic implementations and extends them with:
+
+- Additional experimental analysis across noise levels
+- Study of generalization under distribution shifts
+- Comparative evaluation of model architectures
+- Investigation of model behavior and failure cases
+
+## 🚀 Future Work
+
+- Extend to non-Gaussian degradations (blur, compression artifacts)
+- Investigate data-driven synthetic generation strategies
+- Explore explainability methods for denoising networks
+- Study lightweight architectures for efficient deployment
 
 
 
