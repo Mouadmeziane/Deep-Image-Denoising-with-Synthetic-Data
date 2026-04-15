@@ -2,6 +2,57 @@
 
 Use deep Convolutional Neural Networks (CNNs) with PyTorch, including investigating DnCNN and U-net architectures. More details in [`tutorial.ipynb`](src/tutorial.ipynb).
 
+ A Study of Model Behavior and Generalization
+
+## 📌 Overview
+
+This project investigates the behavior of deep convolutional neural networks for image denoising under **synthetic degradation settings**.
+
+Rather than focusing solely on performance, this work explores:
+- how denoising models behave under different noise conditions,
+- their ability to generalize across noise distributions,
+- and the trade-offs between model complexity and restoration quality.
+
+The study is inspired by recent research directions in **data-centric learning** and **understanding deep models beyond empirical performance**.
+
+---
+
+## 🎯 Objectives
+
+The main goals of this project are:
+
+- To implement and evaluate deep CNN-based image denoising models
+- To simulate controlled degradation using **synthetic noise**
+- To analyze model performance and **failure cases**
+- To study the **impact of model architecture on restoration quality**
+- To explore **generalization across noise levels**
+
+---
+
+## 🧠 Methodology
+
+### 1. Synthetic Data Generation
+
+Clean images from the BSD dataset are degraded using controlled Gaussian noise:
+
+- Noise model: additive Gaussian noise
+- Noise level controlled via parameter `σ`
+- Enables systematic evaluation across different degradation intensities
+
+This setup allows full control over the data distribution, which is essential for analyzing model behavior.
+
+---
+
+
+### 2. Models
+
+The following architectures are implemented and compared:
+
+- **DnCNN**: standard deep convolutional denoising network
+- **UDnCNN**: U-shaped variant with pooling/unpooling
+- **DUDnCNN**: dilated convolution variant for larger receptive fields
+
+
 ## Model Architecture
 
 1. DnCNN
@@ -17,6 +68,13 @@ Each convolution placed after `k` pooling and `l` unpooling in the network, shou
 ![](images/dilated_conv.png)
 
 
+These models differ in:
+- depth
+- receptive field
+- architectural complexity
+
+---
+
 
 ## Dataset
 
@@ -25,6 +83,17 @@ Images from [Berkeley Segmentation Dataset and Benchmark](https://www2.eecs.berk
 * Download here: [https://www2.eecs.berkeley.edu/Research/Projects/CS/vision/bsds/BSDS300-images.tgz](https://www2.eecs.berkeley.edu/Research/Projects/CS/vision/bsds/BSDS300-images.tgz)
 
 It contains two sub-directories: `train` and `test`, which consist of 200 and 100 images, respectively, of either size `321 × 481` or `481 × 321`. While we saw that thousand to millions of images were required for image classification, we can use a much smaller training set for image denoising. This is because denoising each pixel of an image can be seen as one regression problem. Hence, our training is in fact composed of `200 × 321 × 481` **≈ 31 million** samples.
+
+
+## 3. Training Setup
+
+- Framework: PyTorch
+- Loss: Mean Squared Error (MSE)
+- Optimization: Adam
+- Evaluation metric: **PSNR (Peak Signal-to-Noise Ratio)**
+
+---
+
 
 ## Testing Environment  
 
@@ -43,6 +112,17 @@ It contains two sub-directories: `train` and `test`, which consist of 200 and 10
 git clone https://github.com/lychengr3x/Image-Denoising-with-Deep-CNNs.git
 ```
 
+
+### 4. Evaluation Strategy
+
+Models are evaluated under:
+
+- Different noise levels (σ)
+- Training vs testing distribution mismatch
+- Visual inspection of restored outputs
+
+---
+
 2. Download dataset
 
 ```bash
@@ -60,10 +140,47 @@ python main.py
 ```
 
 **PS**: Read [`argument.py`](src/argument.py) to see what parameters that you can change.  
+---
 
-## Demonstration and tutorial
+## 📊 Experimental Analysis
 
-Please see [`demo.ipynb`](src/demo.ipynb) for demonstration, and [`tutorial.ipynb`](src/tutorial.ipynb) for tutorial.
+This project focuses on **understanding model behavior**, not just reporting metrics.
+
+### 🔍 Key Questions Explored
+
+- How does denoising performance degrade as noise increases?
+- Do models trained on a specific noise level generalize to others?
+- What types of structures (edges, textures) are harder to restore?
+- How does architecture complexity impact performance?
+
+---
+
+### ⚠️ Observations
+
+- Models perform well under **matched training/testing noise conditions**
+- Performance drops significantly under **distribution shift**
+- Fine textures are harder to reconstruct than smooth regions
+- Larger models improve performance but increase computational cost
+
+---
+
+## ⚡ Model Complexity vs Performance
+
+A comparative analysis was conducted between models of varying depth and complexity:
+
+| Model     | Complexity | Performance | Observations |
+|----------|----------|------------|-------------|
+| DnCNN     | Low      | Moderate   | Fast but limited capacity |
+| UDnCNN    | Medium   | Good       | Better spatial modeling |
+| DUDnCNN   | High     | Best       | Strong performance, higher cost |
+
+This highlights the trade-off between **frugality** and **accuracy**.
+
+---
+
+
+
+
 
 > Note: There *might be* minor mistakes regarding the model architecture in the code.
 
